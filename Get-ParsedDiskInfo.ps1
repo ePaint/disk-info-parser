@@ -90,7 +90,7 @@ function Convert-FixedWidthToCsv {
     
     $Columns = Get-FixedWidthColumns -HeaderLine $Lines[0]
     
-    $Output = ForEach ($Line in $Lines[1..($Lines.Count-1)]) {
+    $Output = ForEach ($Line in $Lines[1..($Lines.Count - 1)]) {
         If (-not [string]::IsNullOrWhiteSpace($Line)) {
             $Row = [ordered]@{}
             
@@ -100,8 +100,9 @@ function Convert-FixedWidthToCsv {
                 
                 If ($i -eq $Columns.Count - 1) {
                     $Value = $Line.Substring($start).Trim()
-                } Else {
-                    $Length = $Columns[$i+1].Start - $Start
+                }
+                Else {
+                    $Length = $Columns[$i + 1].Start - $Start
                     $Value = $Line.Substring($Start, $Length).Trim()
                 }
                 
@@ -128,7 +129,7 @@ Function Get-DiskMetadata {
 
     $Metadata = [PSCustomObject]@{
         "GeneralProperties" = @{}
-        "SMART" = @{}
+        "SMART"             = @{}
     }
 
     $Section = "GeneralProperties"
@@ -185,16 +186,18 @@ Function Get-DiskList {
     $Content | ForEach-Object {
         If ($_ -match '^-- Disk List -+$') {
             $InsideDiskList = $true
-        } ElseIf ($InsideDiskList -and $_ -match '^-+$') {
+        }
+        ElseIf ($InsideDiskList -and $_ -match '^-+$') {
             $InsideDiskList = $false
-        } ElseIf ($InsideDiskList) {
+        }
+        ElseIf ($InsideDiskList) {
             $DiskList += [regex]::Matches($_, $DiskPattern) | ForEach-Object {
                 [PSCustomObject]@{
-                    Index = $_.Groups['Index'].Value
-                    Model = $_.Groups['Model'].Value
-                    Label = "($($_.Groups['Index'].Value)) $($_.Groups['Model'].Value)"
-                    Match = "^ \($($_.Groups['Index'].Value)\) $($_.Groups['Model'].Value)$"
-                    Content = @()
+                    Index    = $_.Groups['Index'].Value
+                    Model    = $_.Groups['Model'].Value
+                    Label    = "($($_.Groups['Index'].Value)) $($_.Groups['Model'].Value)"
+                    Match    = "^ \($($_.Groups['Index'].Value)\) $($_.Groups['Model'].Value)$"
+                    Content  = @()
                     Metadata = @{}
                 }
             }
@@ -206,21 +209,25 @@ Function Get-DiskList {
     $DiskIndex++
     If ($DiskList.Count -gt $DiskIndex) {
         $NextDisk = $DiskList[$DiskIndex]
-    } Else {
+    }
+    Else {
         $NextDisk = $null
     }
     $Content | ForEach-Object {
         If ($_ -match $Disk.Match) {
             $InsideDisk = $true
-        } ElseIf ($InsideDisk -and $null -ne $NextDisk -and $_ -match $NextDisk.Match) {
+        }
+        ElseIf ($InsideDisk -and $null -ne $NextDisk -and $_ -match $NextDisk.Match) {
             $Disk = $DiskList[$DiskIndex]
             $DiskIndex++
             If ($DiskList.Count -gt $DiskIndex) {
                 $NextDisk = $DiskList[$DiskIndex]
-            } Else {
+            }
+            Else {
                 $NextDisk = $null
             }
-        } ElseIf ($InsideDisk) {
+        }
+        ElseIf ($InsideDisk) {
             $Disk.Content += $_
         }
     }
@@ -247,6 +254,7 @@ Function Convert-DiskToString {
     Return $Output
 }
 
+Write-Log "Raw File Paths: $FilePaths" Cyan
 $FilePaths | ForEach-Object {
     Write-Log "Processing File: $_" Cyan
     $Content = Get-Content -Path $_
