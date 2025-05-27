@@ -1,10 +1,15 @@
-Param
-(
-    [Parameter(Mandatory = $true)]
-    [string[]]$FilePaths,
-    [Parameter(Mandatory = $false)]
-    [string]$OutputPath = ""
+$FilePaths = @(
+    "C:\Path\To\Your\DiskInfoFile1.txt",
+    "C:\Path\To\Your\DiskInfoFile2.txt"
 )
+
+# Param
+# (
+#     [Parameter(Mandatory = $true)]
+#     [string[]]$FilePaths,
+#     [Parameter(Mandatory = $false)]
+#     [string]$OutputPath = ""
+# )
 
 # ---------------------------------------- SETTINGS ---------------------------------------- #
 
