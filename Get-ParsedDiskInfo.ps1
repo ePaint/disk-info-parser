@@ -1,6 +1,7 @@
 $FilePaths = @(
-    "C:\Path\To\Your\DiskInfoFile1.txt",
-    "C:\Path\To\Your\DiskInfoFile2.txt"
+#     "C:\Path\To\Your\DiskInfoFile1.txt",
+#     "C:\Path\To\Your\DiskInfoFile2.txt",
+    "DiskInfo.txt"
 )
 
 # Param
@@ -25,10 +26,8 @@ $LogTimestamp = Get-Date -Format "yyyy-MM-dd HH-mm-ss-fff"
 
 $Global:LogPath = $Global:LogPath.Replace("[Timestamp]", $LogTimestamp)
 
-If ($OutputPath -eq "") {
-    $Timestamp = (Get-Date).ToString("yyyyMMdd-HHmmss")
-    $OutputPath = "ParsedDiskInfo-$Timestamp.txt"
-}
+$Timestamp = (Get-Date).ToString("yyyyMMdd-HHmmss")
+$OutputPath = "ParsedDiskInfo-$Timestamp.txt"
 
 Function Write-Log {
     Param (
